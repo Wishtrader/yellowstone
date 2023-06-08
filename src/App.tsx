@@ -78,29 +78,29 @@ function App() {
           <div className="flex">
             <Dropdown
               title='Season'
-              icon='./src/assets/arrow.svg'
+              icon='./assets/arrow.svg'
               iconAlt='Arrow'
               listItems={seasons} />
             <Dropdown
               title='Location'
-              icon='./src/assets/arrow.svg'
+              icon='./assets/arrow.svg'
               iconAlt='Arrow'
               listItems={cities} />
             <Dropdown
               title='Type'
-              icon='./src/assets/arrow.svg'
+              icon='./assets/arrow.svg'
               iconAlt='Arrow'
               listItems={category} />
             <Dropdown
               title='Sort by'
-              icon='./src/assets/arrow.svg'
+              icon='./assets/arrow.svg'
               iconAlt='Arrow'
               listItems={[]} />
           </div>
-          <Button title={'Map'} icon='./src/assets/map.svg' fill='solid' />
+          <Button title={'Map'} icon='./assets/map.svg' fill='solid' />
         </div>
         <div className='flex items-center my-[1.5vw]'>
-          <TagBtn tagName='Madison' icon='./src/assets/close.svg' />
+          <TagBtn tagName='Madison' icon='./assets/close.svg' />
           <div className='ml-4'>
             <Button title='Clear All' fill='ghost' />
           </div>

@@ -24,18 +24,18 @@ const ListItem = (props) => {
         <p className="text-[#333333] text-[1vw]">{city}</p>
         <h2 className='text-[3vw] text-[#333333] leading-[3vw] font-semibold mt-5 mb-2.5'>{name}</h2>
         <div className='flex items-start text-[#474846] text-[1.2vw] leading-[1.8]'>
-          <img className='mr-2' src="/src/assets/pin.svg" alt="address"/>
+          <img className='mr-2' src="/public/assets/pin.svg" alt="address"/>
           <div>
             <p className=''>{address}</p>
             <p className=''>{city}</p>
           </div>
         </div>
         <div className='flex items-start text-[#474846] text-[1.2vw] leading-[1.8]'>
-          <img className='mr-2' src="/src/assets/phone.svg" alt="phone"/>
+          <img className='mr-2' src="/public/assets/phone.svg" alt="phone"/>
             <a href={'tel:' + phone}>{phone}</a>
         </div>
         <div className='flex items-center text-[#474846] text-[1.2vw] leading-[1.8]'>
-          <img className='ml-1 mr-3' src="/src/assets/earth.svg" alt="website"/>
+          <img className='ml-1 mr-3' src="/public/assets/earth.svg" alt="website"/>
           <a href={website}>{website}</a>
         </div>
         <div className='mt-4'>

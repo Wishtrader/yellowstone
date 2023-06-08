@@ -6,6 +6,7 @@ import {useQuery} from "react-query";
 import ListItem from "./components/ListItem.tsx";
 import {useState} from "react";
 import NavigateBtn from "./components/NavigateBtn.tsx";
+import Spinner from "./components/Spinner.tsx";
 
 async function fetchLodgings(page = 1) {
   const apiUrl = `https://x8ki-letl-twmt.n7.xano.io/api:sWGvXIXK/yellowstone?page=${page}`;
@@ -22,7 +23,7 @@ function App() {
     );
 
   if (isLoading) {
-    return <h3>Loading...</h3>
+    return <Spinner />
   }
   if (isError) {
     return <h3>Loading Error!</h3>

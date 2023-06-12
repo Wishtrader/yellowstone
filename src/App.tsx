@@ -4,10 +4,11 @@ import TagBtn from "./components/TagBtn";
 import axios from 'axios';
 import {useQuery} from "react-query";
 import ListItem from "./components/ListItem";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import NavigateBtn from "./components/NavigateBtn";
 import Spinner from "./components/Spinner";
 import {useFilters} from "./store";
+import {logger} from "react-query/types/react/logger";
 
 interface DropdownData {
   Seasons: string;
@@ -38,7 +39,21 @@ function App() {
     () => fetchLodgings(page),
     {keepPreviousData: true}
     );
-  const filters: Set<string> = useFilters((state: any) => new Set(state.filters));
+  const filters: Set<string> = useFilters((state: any) => state.filters);
+  const removeFilters = useFilters((state: any) => state.removeAllFilters);
+  const removeFilter = useFilters((state: any) => state.removeFilter);
+
+  useEffect(() => {
+    window.localStorage.setItem('filters', JSON.stringify([...filters]));
+  }, [filters])
+
+  const removeFilterHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
+    const target: HTMLElement = e.target as HTMLImageElement;
+    removeFilter(target.getAttribute('data-value'));
+  }
+  const removeAllFiltersHandler = (): void => {
+    removeFilters();
+  }
 
   if (isLoading) {
     return <Spinner />
@@ -63,7 +78,6 @@ function App() {
   const cities: string[] = getPropertyValues(listData, 'Location');
   const seasons: string[] = getPropertyValues(listData, 'Seasons');
   const category: string[] = getPropertyValues(listData, 'Category');
-
 
   function prevHandler() {
     if (page > 1) {
@@ -110,10 +124,15 @@ function App() {
           <Button title={'Map'} icon='./assets/map.svg' fill='solid' />
         </div>
         <div className='flex items-center my-[1.5vw]'>
-          <TagBtn tagName='Madison' icon='./assets/close.svg' />
-          <div className='ml-4'>
-            <Button title='Clear All' fill='ghost' />
-          </div>
+          {filters.size > 0 && [...filters].map((el) => {
+            return (
+                <TagBtn key={el} filterName={el} icon='./assets/close.svg'
+                        onClick={removeFilterHandler}
+                />
+          )})}
+          {filters.size > 1 && <div className='ml-4'>
+              <Button title='Clear All' fill='ghost' onClick={removeAllFiltersHandler} />
+          </div>}
         </div>
         <div className='flex flex-col'>
           {data.items.map((el: Item) => {

@@ -1,12 +1,30 @@
-import Dropdown from "./components/Dropdown.tsx";
-import Button from "./components/Button.tsx";
-import TagBtn from "./components/TagBtn.tsx";
+import Dropdown from "./components/Dropdown";
+import Button from "./components/Button";
+import TagBtn from "./components/TagBtn";
 import axios from 'axios';
 import {useQuery} from "react-query";
-import ListItem from "./components/ListItem.tsx";
+import ListItem from "./components/ListItem";
 import {useState} from "react";
-import NavigateBtn from "./components/NavigateBtn.tsx";
-import Spinner from "./components/Spinner.tsx";
+import NavigateBtn from "./components/NavigateBtn";
+import Spinner from "./components/Spinner";
+import {useFilters} from "./store";
+
+interface DropdownData {
+  Seasons: string;
+  Location: string;
+  Category: string;
+}
+
+interface Item {
+  id: string;
+  Phone: string;
+  Name: string;
+  City_State_ZIP: string;
+  Address: string;
+  Website: string;
+  Image: string;
+  Advertiser: string;
+}
 
 async function fetchLodgings(page = 1) {
   const apiUrl = `https://x8ki-letl-twmt.n7.xano.io/api:sWGvXIXK/yellowstone?page=${page}`;
@@ -14,13 +32,13 @@ async function fetchLodgings(page = 1) {
   return data;
 }
 
-
 function App() {
   const [page, setPage] = useState(1);
   const {data, isError, isLoading} = useQuery(['lodgings', page],
     () => fetchLodgings(page),
     {keepPreviousData: true}
     );
+  const filters: Set<string> = useFilters((state: any) => new Set(state.filters));
 
   if (isLoading) {
     return <Spinner />
@@ -32,33 +50,19 @@ function App() {
     return <h3>No Data</h3>
   }
 
-  function getSeasons(data) {
-    const seasons: Set<string> = new Set();
-    data.map(season => {
-      seasons.add(season.Seasons)
-    })
-    return Array.from(seasons);
+  function getPropertyValues<T, K extends keyof T>(data: T[], property: K): string[] {
+    const propertyValues: Set<string> = new Set();
+    data.forEach((item) => {
+      propertyValues.add(item[property] as string);
+    });
+    return Array.from(propertyValues);
   }
 
-  function getLocations(data) {
-    const locations: Set<string> = new Set();
-    data.map(city => {
-      locations.add(city.Location)
-    })
-    return Array.from(locations);
-  }
+  const listData: DropdownData[] = data.items;
 
-  function getCategories(data) {
-    const categories: Set<string> = new Set();
-    data.map(category => {
-      categories.add(category.Category)
-    })
-    return Array.from(categories);
-  }
-
-  const cities = getLocations(data.items);
-  const seasons = getSeasons(data.items);
-  const category = getCategories(data.items);
+  const cities: string[] = getPropertyValues(listData, 'Location');
+  const seasons: string[] = getPropertyValues(listData, 'Seasons');
+  const category: string[] = getPropertyValues(listData, 'Category');
 
 
   function prevHandler() {
@@ -71,6 +75,7 @@ function App() {
     setPage((prev) => prev + 1)
   }
 
+  console.log(filters)
 
   return (
     <>
@@ -81,22 +86,26 @@ function App() {
               title='Season'
               icon='./assets/arrow.svg'
               iconAlt='Arrow'
-              listItems={seasons} />
+              listItems={seasons}
+            />
             <Dropdown
               title='Location'
               icon='./assets/arrow.svg'
               iconAlt='Arrow'
-              listItems={cities} />
+              listItems={cities}
+            />
             <Dropdown
               title='Type'
               icon='./assets/arrow.svg'
               iconAlt='Arrow'
-              listItems={category} />
+              listItems={category}
+            />
             <Dropdown
               title='Sort by'
               icon='./assets/arrow.svg'
               iconAlt='Arrow'
-              listItems={[]} />
+              listItems={[]}
+            />
           </div>
           <Button title={'Map'} icon='./assets/map.svg' fill='solid' />
         </div>
@@ -107,7 +116,7 @@ function App() {
           </div>
         </div>
         <div className='flex flex-col'>
-          {data.items.map(el => {
+          {data.items.map((el: Item) => {
               return (
                 <ListItem
                   id={el.id}

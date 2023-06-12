@@ -1,5 +1,5 @@
 import React, {DetailedHTMLProps} from "react";
-import Button from "./Button.tsx";
+import Button from "./Button";
 
 export interface IlistItem extends DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   id: string,
@@ -9,8 +9,9 @@ export interface IlistItem extends DetailedHTMLProps<React.HTMLAttributes<HTMLDi
   address: string,
   website: string,
   image: string,
+  advertiser: string
 }
-const ListItem = (props) => {
+const ListItem = (props: IlistItem) => {
 
   const {id, phone, name, city, address, website, image}: IlistItem = props
 

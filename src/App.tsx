@@ -100,35 +100,35 @@ function App() {
           <div className="flex">
             <Dropdown
               title='Season'
-              icon='./assets/arrow.svg'
+              icon='https://yellowstone-opal.vercel.app/assets/arrow.svg'
               iconAlt='Arrow'
               listItems={seasons}
             />
             <Dropdown
               title='Location'
-              icon='./assets/arrow.svg'
+              icon='https://yellowstone-opal.vercel.app/assets/arrow.svg'
               iconAlt='Arrow'
               listItems={cities}
             />
             <Dropdown
               title='Type'
-              icon='./assets/arrow.svg'
+              icon='https://yellowstone-opal.vercel.app/assets/arrow.svg'
               iconAlt='Arrow'
               listItems={category}
             />
             <Dropdown
               title='Sort by'
-              icon='./assets/arrow.svg'
+              icon='https://yellowstone-opal.vercel.app/assets/arrow.svg'
               iconAlt='Arrow'
               listItems={[]}
             />
           </div>
-          <Button title={'Map'} icon='./assets/map.svg' fill='solid' />
+          <Button title={'Map'} icon='https://yellowstone-opal.vercel.app/assets/map.svg' fill='solid' />
         </div>
         <div className='flex items-center my-[1.5vw]'>
           {filters.length > 0 && [...filters].map((el) => {
             return (
-                <TagBtn key={el} filterName={el} icon='./assets/close.svg'
+                <TagBtn key={el} filterName={el} icon='https://yellowstone-opal.vercel.app/assets/close.svg'
                         onClick={removeFilterHandler}
                 />
           )})}

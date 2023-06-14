@@ -8,7 +8,6 @@ import {useEffect, useState} from "react";
 import NavigateBtn from "./components/NavigateBtn";
 import Spinner from "./components/Spinner";
 import {useFilters} from "./store";
-import {logger} from "react-query/types/react/logger";
 
 interface DropdownData {
   Seasons: string;
@@ -33,13 +32,16 @@ async function fetchLodgings(page = 1) {
   return data;
 }
 
+
 function App() {
+
   const [page, setPage] = useState(1);
   const {data, isError, isLoading} = useQuery(['lodgings', page],
     () => fetchLodgings(page),
     {keepPreviousData: true}
     );
-  const filters: Set<string> = useFilters((state: any) => state.filters);
+  console.log(data)
+  const filters = useFilters((state: any) => [...state.filters]);
   const removeFilters = useFilters((state: any) => state.removeAllFilters);
   const removeFilter = useFilters((state: any) => state.removeFilter);
 
@@ -124,13 +126,13 @@ function App() {
           <Button title={'Map'} icon='./assets/map.svg' fill='solid' />
         </div>
         <div className='flex items-center my-[1.5vw]'>
-          {filters.size > 0 && [...filters].map((el) => {
+          {filters.length > 0 && [...filters].map((el) => {
             return (
                 <TagBtn key={el} filterName={el} icon='./assets/close.svg'
                         onClick={removeFilterHandler}
                 />
           )})}
-          {filters.size > 1 && <div className='ml-4'>
+          {filters.length > 1 && <div className='ml-4'>
               <Button title='Clear All' fill='ghost' onClick={removeAllFiltersHandler} />
           </div>}
         </div>

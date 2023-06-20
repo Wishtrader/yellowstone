@@ -15,7 +15,7 @@ const Dropdown = (props: IDropdown): ReactElement => {
 
   const filterHandle = (e: React.MouseEvent<HTMLLIElement>): void => {
     const target: HTMLElement = e.target as HTMLLIElement;
-    addFilters(target.innerText);
+    addFilters(target.innerText.toLowerCase());
   }
 
 

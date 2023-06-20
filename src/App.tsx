@@ -24,14 +24,17 @@ interface Item {
   Website: string;
   Image: string;
   Advertiser: string;
+  Category: string;
+  Location: string;
+  Seasons: string;
 }
+
 
 async function fetchLodgings(page = 1) {
   const apiUrl = `https://x8ki-letl-twmt.n7.xano.io/api:sWGvXIXK/yellowstone?page=${page}`;
   const {data} = await axios.get(apiUrl);
   return data;
 }
-
 
 function App() {
 
@@ -45,8 +48,26 @@ function App() {
   const removeFilters = useFilters((state: any) => state.removeAllFilters);
   const removeFilter = useFilters((state: any) => state.removeFilter);
 
+  const filteredItems = (): Item[] => {
+    if (filters.length === 0) {
+      return data?.items;
+    }
+
+    return data?.items.filter((item: Item) => {
+      return filters.every((filter: string) => {
+        return item.Location?.toLowerCase().includes(filter) ||
+          item.Seasons?.toLowerCase().includes(filter) ||
+          item.Category?.toLowerCase().includes(filter);
+      });
+    });
+  }
+
+  const filteredData: Item[] = filteredItems();
+  console.log('filteredData', filteredData)
+
   useEffect(() => {
     window.localStorage.setItem('filters', JSON.stringify([...filters]));
+    console.log('filters', filters)
   }, [filters])
 
   const removeFilterHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
@@ -93,6 +114,7 @@ function App() {
 
   console.log(filters)
 
+
   return (
     <>
       <div className="container mx-auto max-w-[73vw] flex flex-col pt-10">
@@ -137,7 +159,7 @@ function App() {
           </div>}
         </div>
         <div className='flex flex-col'>
-          {data.items.map((el: Item) => {
+          {filteredData.map((el: Item) => {
               return (
                 <ListItem
                   id={el.id}

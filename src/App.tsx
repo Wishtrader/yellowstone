@@ -4,8 +4,7 @@ import TagBtn from "./components/TagBtn";
 import axios from 'axios';
 import {useQuery} from "react-query";
 import ListItem from "./components/ListItem";
-import {useEffect, useState} from "react";
-import NavigateBtn from "./components/NavigateBtn";
+import {useEffect} from "react";
 import Spinner from "./components/Spinner";
 import {useFilters} from "./store";
 
@@ -38,8 +37,7 @@ async function fetchLodgings() {
 
 function App() {
 
-  const [page, setPage] = useState(1);
-  const {data, isError, isLoading} = useQuery(['lodgings', page],
+  const {data, isError, isLoading} = useQuery(['lodgings'],
     () => fetchLodgings(),
     {keepPreviousData: true}
     );

@@ -30,8 +30,8 @@ interface Item {
 }
 
 
-async function fetchLodgings(page = 1) {
-  const apiUrl = `https://x8ki-letl-twmt.n7.xano.io/api:sWGvXIXK/yellowstone?page=${page}`;
+async function fetchLodgings() {
+  const apiUrl = `https://x8ki-letl-twmt.n7.xano.io/api:sWGvXIXK/yellowstone`;
   const {data} = await axios.get(apiUrl);
   return data;
 }
@@ -50,10 +50,9 @@ function App() {
 
   const filteredItems = (): Item[] => {
     if (filters.length === 0) {
-      return data?.items;
+      return data;
     }
-
-    return data?.items.filter((item: Item) => {
+    return data.filter((item: Item) => {
       return filters.every((filter: string) => {
         return item.Location?.toLowerCase().includes(filter) ||
           item.Seasons?.toLowerCase().includes(filter) ||
@@ -96,24 +95,11 @@ function App() {
     return Array.from(propertyValues);
   }
 
-  const listData: DropdownData[] = data.items;
+  const listData: DropdownData[] = data;
 
   const cities: string[] = getPropertyValues(listData, 'Location');
   const seasons: string[] = getPropertyValues(listData, 'Seasons');
   const category: string[] = getPropertyValues(listData, 'Category');
-
-  function prevHandler() {
-    if (page > 1) {
-      setPage((prev) => prev - 1)
-    }
-  }
-
-  function nextHandler() {
-    setPage((prev) => prev + 1)
-  }
-
-  console.log(filters)
-
 
   return (
     <>
@@ -158,6 +144,9 @@ function App() {
               <Button title='Clear All' fill='ghost' onClick={removeAllFiltersHandler} />
           </div>}
         </div>
+        <div className="flex">
+          <p className='text-black/40 text-[0.9vw]'>Found {filteredData.length} records</p>
+        </div>
         <div className='flex flex-col'>
           {filteredData.map((el: Item) => {
               return (
@@ -175,10 +164,6 @@ function App() {
               )
             }
           )}
-        </div>
-        <div className='flex mx-auto my-10'>
-          <NavigateBtn onClick={prevHandler} page={page}>{'< Previous'}</NavigateBtn>
-          <NavigateBtn onClick={nextHandler}>{'Next >'}</NavigateBtn>
         </div>
       </div>
     </>

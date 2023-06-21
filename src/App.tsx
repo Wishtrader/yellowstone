@@ -4,7 +4,7 @@ import TagBtn from "./components/TagBtn";
 import axios from 'axios';
 import {useQuery} from "react-query";
 import ListItem from "./components/ListItem";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import Spinner from "./components/Spinner";
 import {useFilters} from "./store";
 
@@ -30,18 +30,14 @@ interface Item {
 
 
 async function fetchLodgings() {
-  const apiUrl = `https://x8ki-letl-twmt.n7.xano.io/api:sWGvXIXK/yellowstone`;
+  const apiUrl = 'https://x8ki-letl-twmt.n7.xano.io/api:sWGvXIXK/yellowstone';
   const {data} = await axios.get(apiUrl);
   return data;
 }
 
 function App() {
 
-  const {data, isError, isLoading} = useQuery(['lodgings'],
-    () => fetchLodgings(),
-    {keepPreviousData: true}
-    );
-  console.log(data)
+  const {data, isError, isLoading} = useQuery(['lodgings'],() => fetchLodgings());
   const filters = useFilters((state: any) => [...state.filters]);
   const removeFilters = useFilters((state: any) => state.removeAllFilters);
   const removeFilter = useFilters((state: any) => state.removeFilter);
@@ -50,7 +46,7 @@ function App() {
     if (filters.length === 0) {
       return data;
     }
-    return data.filter((item: Item) => {
+    return data?.filter((item: Item) => {
       return filters.every((filter: string) => {
         return item.Location?.toLowerCase().includes(filter) ||
           item.Seasons?.toLowerCase().includes(filter) ||
@@ -99,6 +95,11 @@ function App() {
   const seasons: string[] = getPropertyValues(listData, 'Seasons');
   const category: string[] = getPropertyValues(listData, 'Category');
 
+
+
+  console.log(filters)
+
+
   return (
     <>
       <div className="container mx-auto max-w-[73vw] flex flex-col pt-10">
@@ -142,10 +143,8 @@ function App() {
               <Button title='Clear All' fill='ghost' onClick={removeAllFiltersHandler} />
           </div>}
         </div>
-        <div className="flex">
-          <p className='text-black/40 text-[0.9vw]'>Found {filteredData.length} records</p>
-        </div>
         <div className='flex flex-col'>
+          <p className="text-black/40 text-[0.9vw]">Found {filteredData.length} recorde</p>
           {filteredData.map((el: Item) => {
               return (
                 <ListItem

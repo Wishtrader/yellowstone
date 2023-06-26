@@ -13,7 +13,7 @@ export interface IlistItem extends DetailedHTMLProps<React.HTMLAttributes<HTMLDi
 }
 const ListItem = (props: IlistItem) => {
 
-  const {id, phone, name, city, address, website, image}: IlistItem = props
+  const {id, phone, name, city, address, website, image, advertiser}: IlistItem = props
 
   return (
     <div className='flex my-5' id={id}>
@@ -40,7 +40,7 @@ const ListItem = (props: IlistItem) => {
           <a href={website}>{website}</a>
         </div>
         <div className='mt-4'>
-          <Button title='Read More' fill='solid'/>
+          {advertiser && <Button title='Read More' fill='solid'/> }
         </div>
       </div>
     </div>

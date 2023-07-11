@@ -1,39 +1,56 @@
 import Dropdown from "./components/Dropdown";
 import Button from "./components/Button";
 import TagBtn from "./components/TagBtn";
-import axios from 'axios';
 import {useQuery} from "react-query";
 import ListItem from "./components/ListItem";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import Spinner from "./components/Spinner";
 import {useFilters} from "./store";
 
 interface DropdownData {
-  Seasons: string;
-  Location: string;
-  Category: string;
+  seasons: string;
+  location: string;
+  category: string;
 }
 
 interface Item {
   id: string;
-  Phone: string;
-  Name: string;
-  City_State_ZIP: string;
-  Address: string;
-  Website: string;
-  Image: string;
-  Advertiser: string;
-  Category: string;
-  Location: string;
-  Seasons: string;
+  slug: string;
+  phone: string;
+  name: string;
+  addressfull: string;
+  address: string;
+  website: string;
+  image: string;
+  advertiser: string;
+  category: string;
+  location: string;
+  seasons: string;
 }
 
 
-async function fetchLodgings() {
-  const apiUrl = 'https://x8ki-letl-twmt.n7.xano.io/api:sWGvXIXK/yellowstone';
-  const {data} = await axios.get(apiUrl);
-  return data;
+// async function fetchLodgings() {
+//   const apiUrl = 'https://x8ki-letl-twmt.n7.xano.io/api:sWGvXIXK/yellowstone';
+//   const {data} = await axios.get(apiUrl);
+//   return data;
+// }
+
+
+  async function fetchLodgings() {
+  const apiUrl = 'https://api.webflow.com/collections/649a06edc4a80543ae627458/items?access_token=0b3e056fcac319b61b225cfb2eaae45ea52c1bddb5a76d110c600d2836a2e245';
+  const options = {
+  method: 'GET',
+  headers: {
+  accept: 'application/json',
 }
+};
+  const response = await fetch(apiUrl, options);
+  const data = await response.json();
+  console.log(data);
+  return data.items;
+}
+
+
 
 function App() {
 
@@ -48,9 +65,9 @@ function App() {
     }
     return data?.filter((item: Item) => {
       return filters.every((filter: string) => {
-        return item.Location?.toLowerCase().includes(filter) ||
-          item.Seasons?.toLowerCase().includes(filter) ||
-          item.Category?.toLowerCase().includes(filter);
+        return item.location?.toLowerCase().includes(filter) ||
+          item.seasons?.toLowerCase().includes(filter) ||
+          item.category?.toLowerCase().includes(filter);
       });
     });
   }
@@ -83,7 +100,7 @@ function App() {
 
   function getPropertyValues<T, K extends keyof T>(data: T[], property: K): string[] {
     const propertyValues: Set<string> = new Set();
-    data.forEach((item) => {
+    data.map((item) => {
       propertyValues.add(item[property] as string);
     });
     return Array.from(propertyValues);
@@ -91,9 +108,9 @@ function App() {
 
   const listData: DropdownData[] = data;
 
-  const cities: string[] = getPropertyValues(listData, 'Location');
-  const seasons: string[] = getPropertyValues(listData, 'Seasons');
-  const category: string[] = getPropertyValues(listData, 'Category');
+  const cities: string[] = getPropertyValues(listData, 'location');
+  const seasons: string[] = getPropertyValues(listData, 'seasons');
+  const category: string[] = getPropertyValues(listData, 'category');
 
 
 
@@ -144,19 +161,19 @@ function App() {
           </div>}
         </div>
         <div className='flex flex-col'>
-          <p className="text-black/40 text-[0.9vw]">Found {filteredData.length} recorde</p>
+          <p className="text-black/40 text-[0.9vw]">Found {filteredData.length} records</p>
           {filteredData.map((el: Item) => {
               return (
                 <ListItem
                   id={el.id}
-                  key={el.id}
-                  phone={el.Phone}
-                  name={el.Name}
-                  city={el.City_State_ZIP}
-                  address={el.Address}
-                  website={el.Website}
-                  image={el.Image}
-                  advertiser={el.Advertiser}
+                  key={el.slug}
+                  phone={el.phone}
+                  name={el.name}
+                  city={el.addressfull}
+                  address={el.address}
+                  website={el.website}
+                  image={el.image}
+                  advertiser={el.advertiser}
                 />
               )
             }

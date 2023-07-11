@@ -1,2 +1,2 @@
-const marker = document.querySelector('#marker');
+const marker = document.querySelectorAll('.marker');
 console.log(marker)
